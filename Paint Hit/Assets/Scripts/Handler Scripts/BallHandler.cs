@@ -8,7 +8,7 @@ public class BallHandler : MonoBehaviour
     public GameObject ball;
 
     private float speed = 100;
-    public static float rotationSpeed = 75f;
+    public static float rotationSpeed = 130f;
 
     void Start()
     {
