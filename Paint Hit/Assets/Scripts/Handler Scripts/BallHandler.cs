@@ -47,10 +47,6 @@ public class BallHandler : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButton(0) || Input.GetKeyDown(KeyCode.Space))
-        {
-            HitBall();
-        }
     }
 
     public void HitBall()
