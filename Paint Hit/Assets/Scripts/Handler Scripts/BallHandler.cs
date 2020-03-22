@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BallHandler : MonoBehaviour
 {
-    public static Color oneColor = Color.green;
+    public static Color oneColor;
     public GameObject ball;
 
     private float speed = 100;
@@ -14,8 +14,26 @@ public class BallHandler : MonoBehaviour
     private int ballsCount;
     private int circleNumber;
 
+    private Color[] ChangingColors;
+
+    public SpriteRenderer spriteRenderer;
+    public Material splashMaterial;
+
     void Start()
     {
+        ResetGame();
+    }
+
+    void ResetGame()
+    {
+        ChangingColors = ColorScript.colorArray;
+        oneColor = ChangingColors[0];
+
+        spriteRenderer.color = oneColor;
+        splashMaterial.color = oneColor;
+
+
+
         GameObject gameObject2 = Instantiate(Resources.Load("round" + Random.Range(1, 4))) as GameObject;
         gameObject2.transform.position = new Vector3(0, 20, 23);
         gameObject2.name = "Circle" + circleNumber;
@@ -79,5 +97,9 @@ public class BallHandler : MonoBehaviour
         gameObject2.transform.position = new Vector3(0, 20, 23);
         gameObject2.name = "Circle" +circleNumber;
         ballsCount = LevelsHandler.ballsCount;
+
+        oneColor = ChangingColors[circleNumber];
+        spriteRenderer.color = oneColor;
+        splashMaterial.color = oneColor;
     }
 }
