@@ -6,8 +6,16 @@ using UnityEngine.UI;
 public class BallHandler : MonoBehaviour
 {
     public static Color oneColor;
+    private static int CircleCount;
+
     public GameObject ball;
     public GameObject dummyBall;
+    public GameObject button;
+    public GameObject levelComplete;
+    public GameObject failScreen;
+    public GameObject startGameScreen;
+    public GameObject circleEffect;
+    public GameObject completeEffect;
 
     private float speed = 100;
     public static float rotationSpeed = 130f;
@@ -17,6 +25,7 @@ public class BallHandler : MonoBehaviour
     private int ballsCount;
     private int circleNumber;
     private int heartsNumber;
+    private int circleCount;
 
     private Color[] ChangingColors;
 
@@ -25,6 +34,13 @@ public class BallHandler : MonoBehaviour
 
     public Image[] balls;
     public GameObject[] hearts;
+
+    public Text totalBallsText;
+    public Text countBallsText;
+    public Text levelCompleteText;
+
+
+    private bool gameFail;
 
 
     void Start()
@@ -81,6 +97,10 @@ public class BallHandler : MonoBehaviour
         ballsCount = LevelsHandler.ballsCount;
         MeshRenderer mesh = dummyBall.GetComponent<MeshRenderer>();
         mesh.material.color = oneColor;
+
+        totalBallsText.text = string.Empty + LevelsHandler.totalCircles;
+        countBallsText.text = string.Empty + circleCount;
+
         for(int i = 0; i < balls.Length; i++)
         {
             balls[i].enabled = false;
@@ -97,6 +117,7 @@ public class BallHandler : MonoBehaviour
     {
         if(ballsCount <= 1)
         {
+            StartCoroutine(HideBtn());
             base.Invoke("MakeNewCircle",0.4f);
             //Disable button for some time
         }
@@ -158,6 +179,7 @@ public class BallHandler : MonoBehaviour
         ChangeBallsCount();
     }
 
+
     void MakeHurdles()
     {
         if(circleNumber == 1)
@@ -180,5 +202,73 @@ public class BallHandler : MonoBehaviour
         {
             FindObjectOfType<LevelsHandler>().MakeHurdles5();
         }
+    }
+
+    IEnumerator HideBtn()
+    {
+        if (!gameFail)
+        {
+            button.SetActive(false);
+            yield return new WaitForSeconds(1);
+            button.SetActive(true);
+        }
+    }
+
+    IEnumerator LevelCompleteScreen()
+    {
+        gameFail = true;
+
+        completeEffect.SetActive(true);
+
+        if (GameObject.Find("Circle0"))
+        {
+            completeEffect.transform.position = GameObject.Find("Circle0").transform.position;
+        }
+        else if (GameObject.Find("Circle1"))
+        {
+            completeEffect.transform.position = GameObject.Find("Circle1").transform.position;
+        }
+        else if (GameObject.Find("Circle2"))
+        {
+            completeEffect.transform.position = GameObject.Find("Circle2").transform.position;
+        }
+
+        GameObject oldCirlce = GameObject.Find("Circle" + circleNumber);
+        for (int i = 0; i < 24; i++)
+        {
+            oldCirlce.transform.GetChild(i).GetComponent<MeshRenderer>().enabled = false;
+        }
+        oldCirlce.transform.GetChild(24).gameObject.GetComponent<MeshRenderer>().material.color = oneColor;
+        oldCirlce.transform.GetComponent<MonoBehaviour>().enabled = false;
+        if (oldCirlce.GetComponent<iTween>())
+            oldCirlce.GetComponent<iTween>().enabled = false;
+        button.SetActive(false);
+        yield return new WaitForSeconds(2);
+        levelComplete.SetActive(true);
+        levelCompleteText.text = string.Empty + LevelsHandler.currentLevel;
+        yield return new WaitForSeconds(1);
+        GameObject[] oldCirlces = GameObject.FindGameObjectsWithTag("circle");
+        foreach (GameObject gameObject in oldCirlces)
+        {
+            Destroy(gameObject.gameObject);
+        }
+        yield return new WaitForSeconds(1);
+        completeEffect.SetActive(false);
+        int currentLevel = PlayerPrefs.GetInt("C_Level");
+        currentLevel++;
+        PlayerPrefs.SetInt("C_Level", currentLevel);
+        //GameObject.FindObjectOfType<LevelsHandler>().UpgradeLevel();
+        ResetGame();
+        levelComplete.SetActive(false);
+        startGameScreen.SetActive(true);
+        gameFail = false;
+    }
+
+    IEnumerator CircleEffect()
+    {
+        yield return new WaitForSeconds(.4f);
+        circleEffect.SetActive(true);
+        yield return new WaitForSeconds(.8f);
+        circleEffect.SetActive(false);
     }
 }
