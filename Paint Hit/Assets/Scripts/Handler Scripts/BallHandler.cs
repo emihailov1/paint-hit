@@ -10,6 +10,7 @@ public class BallHandler : MonoBehaviour
     private float speed = 100;
     public static float rotationSpeed = 130f;
     public static float rotationTime = 3;
+    public static int currentCircleNumber;
 
     private int ballsCount;
     private int circleNumber;
@@ -32,13 +33,15 @@ public class BallHandler : MonoBehaviour
         spriteRenderer.color = oneColor;
         splashMaterial.color = oneColor;
 
-
-
         GameObject gameObject2 = Instantiate(Resources.Load("round" + Random.Range(1, 4))) as GameObject;
         gameObject2.transform.position = new Vector3(0, 20, 23);
         gameObject2.name = "Circle" + circleNumber;
 
         ballsCount = LevelsHandler.ballsCount;
+        currentCircleNumber = circleNumber;
+        LevelsHandler.currentColor = oneColor;
+
+        MakeHurdles();
     }
 
 
@@ -92,14 +95,43 @@ public class BallHandler : MonoBehaviour
             }));
         }
         circleNumber++;
+        currentCircleNumber = circleNumber;
 
         GameObject gameObject2 = Instantiate(Resources.Load("round" + Random.Range(1, 4))) as GameObject;
         gameObject2.transform.position = new Vector3(0, 20, 23);
         gameObject2.name = "Circle" +circleNumber;
+
         ballsCount = LevelsHandler.ballsCount;
 
         oneColor = ChangingColors[circleNumber];
         spriteRenderer.color = oneColor;
         splashMaterial.color = oneColor;
+
+        LevelsHandler.currentColor = oneColor;
+        MakeHurdles();
+    }
+
+    void MakeHurdles()
+    {
+        if(circleNumber == 1)
+        {
+            FindObjectOfType<LevelsHandler>().MakeHurdles1();
+        }
+        else if (circleNumber == 2)
+        {
+            FindObjectOfType<LevelsHandler>().MakeHurdles2();
+        }
+        else if (circleNumber == 3)
+        {
+            FindObjectOfType<LevelsHandler>().MakeHurdles3();
+        }
+        else if (circleNumber == 4)
+        {
+            FindObjectOfType<LevelsHandler>().MakeHurdles4();
+        }
+        else
+        {
+            FindObjectOfType<LevelsHandler>().MakeHurdles5();
+        }
     }
 }

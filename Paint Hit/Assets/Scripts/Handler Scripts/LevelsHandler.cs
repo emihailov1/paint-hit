@@ -7,6 +7,8 @@ public class LevelsHandler : MonoBehaviour
     public static int currentLevel;
     public static int ballsCount;
     public static int totalCircles;
+
+    public static Color currentColor;
     void Awake()
     {
         if(PlayerPrefs.GetInt("firstTime1") == 0)
@@ -52,6 +54,100 @@ public class LevelsHandler : MonoBehaviour
             totalCircles = 6;
             BallHandler.rotationSpeed = 120;
             BallHandler.rotationTime = 2;
+        }
+    }
+
+    public void MakeHurdles1()
+    {
+        GameObject gameObject = GameObject.Find("Circle" + BallHandler.currentCircleNumber);
+
+        int index = Random.Range(1, 3);
+
+        MeshRenderer mesh = gameObject.transform.GetChild(index).gameObject.GetComponent<MeshRenderer>();
+        mesh.enabled = true;
+        mesh.material.color = currentColor;
+        gameObject.transform.GetChild(index).gameObject.tag = "red";
+    }
+
+    public void MakeHurdles2()
+    {
+        GameObject gameObject = GameObject.Find("Circle" + BallHandler.currentCircleNumber);
+
+        int[] array = new int[]
+        {
+            Random.Range(1,3),
+            Random.Range(15,17)
+        };
+
+        for(int i=0; i< array.Length; i++)
+        {
+            MeshRenderer mesh = gameObject.transform.GetChild(array[i]).gameObject.GetComponent<MeshRenderer>();
+            mesh.enabled = true;
+            mesh.material.color = currentColor;
+            gameObject.transform.GetChild(i).gameObject.tag = "red";
+        }
+    }
+
+    public void MakeHurdles3()
+    {
+        GameObject gameObject = GameObject.Find("Circle" + BallHandler.currentCircleNumber);
+
+        int[] array = new int[]
+        {
+            Random.Range(1,3),
+            Random.Range(4,6),
+            Random.Range(18,20),
+        };
+
+        for (int i = 0; i < array.Length; i++)
+        {
+            MeshRenderer mesh = gameObject.transform.GetChild(array[i]).gameObject.GetComponent<MeshRenderer>();
+            mesh.enabled = true;
+            mesh.material.color = currentColor;
+            gameObject.transform.GetChild(i).gameObject.tag = "red";
+        }
+    }
+
+    public void MakeHurdles4()
+    {
+        GameObject gameObject = GameObject.Find("Circle" + BallHandler.currentCircleNumber);
+
+        int[] array = new int[]
+        {
+            Random.Range(1,3),
+            Random.Range(4,6),
+            Random.Range(15,17),
+            Random.Range(22,24),
+        };
+
+        for (int i = 0; i < array.Length; i++)
+        {
+            MeshRenderer mesh = gameObject.transform.GetChild(array[i]).gameObject.GetComponent<MeshRenderer>();
+            mesh.enabled = true;
+            mesh.material.color = currentColor;
+            gameObject.transform.GetChild(i).gameObject.tag = "red";
+        }
+    }
+
+    public void MakeHurdles5()
+    {
+        GameObject gameObject = GameObject.Find("Circle" + BallHandler.currentCircleNumber);
+
+        int[] array = new int[]
+        {
+            Random.Range(1,3),
+            Random.Range(4,6),
+            Random.Range(11,13),
+            Random.Range(8,10),
+            Random.Range(15,17),
+        };
+
+        for (int i = 0; i < array.Length; i++)
+        {
+            MeshRenderer mesh = gameObject.transform.GetChild(array[i]).gameObject.GetComponent<MeshRenderer>();
+            mesh.enabled = true;
+            mesh.material.color = currentColor;
+            gameObject.transform.GetChild(i).gameObject.tag = "red";
         }
     }
 
