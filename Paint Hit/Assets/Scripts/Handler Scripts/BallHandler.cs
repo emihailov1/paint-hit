@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BallHandler : MonoBehaviour
 {
     public static Color oneColor;
     public GameObject ball;
+    public GameObject dummyBall;
 
     private float speed = 100;
     public static float rotationSpeed = 130f;
@@ -14,11 +16,16 @@ public class BallHandler : MonoBehaviour
 
     private int ballsCount;
     private int circleNumber;
+    private int heartsNumber;
 
     private Color[] ChangingColors;
 
     public SpriteRenderer spriteRenderer;
     public Material splashMaterial;
+
+    public Image[] balls;
+    public GameObject[] hearts;
+
 
     void Start()
     {
@@ -29,6 +36,8 @@ public class BallHandler : MonoBehaviour
     {
         ChangingColors = ColorScript.colorArray;
         oneColor = ChangingColors[0];
+
+        ChangeBallsCount();
 
         spriteRenderer.color = oneColor;
         splashMaterial.color = oneColor;
@@ -41,12 +50,47 @@ public class BallHandler : MonoBehaviour
         currentCircleNumber = circleNumber;
         LevelsHandler.currentColor = oneColor;
 
+        if(heartsNumber == 0)
+        {
+            PlayerPrefs.SetInt("hearts", 1);
+        }
+        heartsNumber = PlayerPrefs.GetInt("hearts", 1);
+
+        for(int i = 0; i < heartsNumber; i++)
+        {
+            hearts[i].SetActive(true);
+        }
+
         MakeHurdles();
+    }
+
+    public void DescreaseHearts()
+    {
+        heartsNumber--;
+        PlayerPrefs.SetInt("hearts", heartsNumber);
+        hearts[heartsNumber].SetActive(false);
     }
 
 
     void Update()
     {
+    }
+
+    void ChangeBallsCount()
+    {
+        ballsCount = LevelsHandler.ballsCount;
+        MeshRenderer mesh = dummyBall.GetComponent<MeshRenderer>();
+        mesh.material.color = oneColor;
+        for(int i = 0; i < balls.Length; i++)
+        {
+            balls[i].enabled = false;
+        }
+
+        for (int j = 0; j < balls.Length; j++)
+        {
+            balls[j].enabled = true;
+            balls[j].color = oneColor;
+        }
     }
 
     public void HitBall()
@@ -57,6 +101,11 @@ public class BallHandler : MonoBehaviour
             //Disable button for some time
         }
         ballsCount--;
+
+        if(ballsCount >= 0)
+        {
+            balls[ballsCount].enabled = false;
+        }
 
         GameObject gameObject = Instantiate<GameObject>(ball, new Vector3(0, 0, -8), Quaternion.identity);
         gameObject.GetComponent<MeshRenderer>().material.color = oneColor;
@@ -105,6 +154,8 @@ public class BallHandler : MonoBehaviour
 
         LevelsHandler.currentColor = oneColor;
         MakeHurdles();
+
+        ChangeBallsCount();
     }
 
     void MakeHurdles()
