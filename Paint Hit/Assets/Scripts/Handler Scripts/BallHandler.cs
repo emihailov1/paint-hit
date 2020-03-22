@@ -20,9 +20,7 @@ public class BallHandler : MonoBehaviour
         gameObject2.transform.position = new Vector3(0, 20, 23);
         gameObject2.name = "Circle" + circleNumber;
 
-        MakeNewCircle();
-
-        ballsCount = 4;
+        ballsCount = LevelsHandler.ballsCount;
     }
 
 
@@ -80,5 +78,6 @@ public class BallHandler : MonoBehaviour
         GameObject gameObject2 = Instantiate(Resources.Load("round" + Random.Range(1, 4))) as GameObject;
         gameObject2.transform.position = new Vector3(0, 20, 23);
         gameObject2.name = "Circle" +circleNumber;
+        ballsCount = LevelsHandler.ballsCount;
     }
 }
